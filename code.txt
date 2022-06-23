@@ -1,0 +1,49 @@
+// SPDX-License-Identifier: No-Licence
+
+ pragma solidity ^0.8.12;
+
+contract Marathon{
+
+    uint256 _number;
+    string _message;
+    address _recipient;
+
+    constructor(string memory _race){
+        _number = 1;
+        _message = _race; 
+        _recipient = msg.sender;
+    }
+
+    function printMessage() public view returns (string memory){
+        return _message;
+    }
+
+  
+    function number() public view returns (uint256) {
+        return  _number;
+    }
+
+    function setMessage(string memory newMessage) external payable{
+        require (_recipient == msg.sender, "Set MESSAGE ONLY OWNER FUNCTION");
+        require (msg.value == 10 ," send some wei");
+        _message=newMessage;
+    }
+
+    function transferOwnership(address newOwner) external{
+        require(_recipient == msg.sender , "only Owner function");
+        _recipient = newOwner;
+    }
+
+    function withdrawFunds() external payable returns (uint256 amount, address recipient){
+        //require (_owner == msg.sender, "only OWNER FUNCTION");
+        uint256 totalbalance = address (this).balance;
+        require(amount<totalbalance);
+        payable(recipient).transfer(amount);
+        //return totalbalance;
+    }
+
+
+
+   
+
+}
